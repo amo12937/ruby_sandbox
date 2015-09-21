@@ -1,16 +1,19 @@
 # バージョン
 
 - ホストOS
-  - Mac OS X 10.10.5
+  - [Mac OS X 10.10.5](https://support.apple.com/kb/DL1832)
 - ゲストOS
   - Ubuntu 14.04.3 LTS
-- Vagrant
+  - ただし使うのは [Vagrant用の box](https://atlas.hashicorp.com/ubuntu/boxes/trusty64/versions/20150911.0.0)
+- [Vagrant](https://www.vagrantup.com/download-archive/v1.7.4.html)
   - 1.7.4
-- Virtualbox
+- [Virtualbox](https://www.virtualbox.org/wiki/Downloads)
   - 5.0.4
-- Rbenv
+- [Rbenv](https://github.com/sstephenson/rbenv)
   - 0.4.0-154-g9e664b5
-- Rails
+- [Ruby](https://www.ruby-lang.org/ja/)
+  - 2.2.3
+- [Rails](http://rubyonrails.org/)
   - 4.2.4
 
 # ファイル構成
@@ -81,6 +84,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     s.path = "#{SCRIPT_BASE_DIR}/git/install.sh"
   end
   # この 2 ファイルがホームディレクトリに無いとエラーが出る
+  # 必須というわけでは無いので使わなければこの2行をコメントアウトしても良い
   config.vm.provision :file, source: "~/.gitconfig", destination: ".gitconfig"
   config.vm.provision :file, source: "~/.gitignore", destination: ".gitignore"
 
