@@ -119,7 +119,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 end
 ```
 
-- LC_ALL がうまく設定できなかったので、`script/etc/add_LC_ALL_to_locale.sh` で直接指定。`en_US.UTF-8` にしているが環境によって書き換えるべし
+- LC_ALL がうまく設定できなかったので、`scripts/etc/add_LC_ALL_to_locale.sh` で直接指定。`en_US.UTF-8` にしているが環境によって書き換えるべし
 
 # 実行
 ホストOS の `${HOGE_ROOT}` ディレクトリ上で下記を実行
@@ -136,10 +136,10 @@ $ vagrant up
 
 以下の手順で、Vagrantfile を少し書き換える。
 
-## `script/project/install.sh` を作る
+## `scripts/projects/install.sh` を作る
 だいたいこんな感じ。案件によって書き換える必要あり。
 
-```bash:script/project/install.sh
+```bash:scripts/projects/install.sh
 #!/bin/bash
 
 # VM 作成時には known_hosts に何も登録されていないので、
@@ -147,7 +147,8 @@ $ vagrant up
 # ssh-keyscan を使って、リポジトリのあるドメインの公開鍵を取得する。
 ssh-keyscan github.com > known_hosts
 
-cd /shared
+mkdir -p /shared/projects
+cd /shared/projects
 git clone git@github.com:hogehoge/fugafuga.git
 
 cd fugafuga
@@ -158,12 +159,12 @@ bundle exec rake db:create
 bundle exec rake db:migrate
 ```
 
-## `script/project/start.sh`
+## `scripts/projects/start.sh`
 
-```bash:script/project/start.sh
+```bash:scripts/projects/start.sh
 #!/bin/bash
 
-cd /shared/fugafuga
+cd /shared/projects/fugafuga
 rails server -b 0.0.0.0 -d
 ```
 
@@ -192,6 +193,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     s.privileged = false
   end
 end
+```
+
+## `.gitignore`
+間違えて案件の機密情報をこのリポジトリにコミットしないように、`.gitignore` も更新しておく。
+
+```bash:.gitignore
+.vagrant
+shared/projects
+scripts/projects
 ```
 
 # パッケージ化しないの？
